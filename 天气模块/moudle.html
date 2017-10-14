@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <input type="text" name="" placeholder="输入城市">
+    <button type="button" name="button" id="btn">查询</button>
+    <div id="weather">
+    </div>
+    <!-- 天气模块 -->
+    <script type="text/html" id="weather_module">
+      <div class="today">
+        <div class="temp">
+          <span><%=data.wendu%>°C</span>
+        </div>
+        <div class="city">
+          <span><%=data.city%>(实时)</span>
+        </div>
+        <div class="status">
+          <span class="type"><%=data.forecast[0].type%></span>
+          <span class="fengxiang"><%=data.forecast[0].fengxiang%></span>
+        </div>
+      </div>
+      <div class="future">
+        <div>
+          <span>今天</span>
+          <span><%=data.forecast[0].low.substr(3)%>/<%=data.forecast[0].high.substr(3)%></span>
+          <span><%=data.forecast[0].type%></span>
+        </div>
+        <div>
+          <span>明天</span>
+          <span><%=data.forecast[1].low.substr(3)%>/<%=data.forecast[1].high.substr(3)%></span>
+          <span><%=data.forecast[1].type%></span>
+        </div>
+        <div>
+          <span>后天</span>
+          <span><%=data.forecast[2].low.substr(3)%>/<%=data.forecast[2].high.substr(3)%></span>
+          <span><%=data.forecast[2].type%></span>
+        </div>
+      </div>
+    </script>
+    <script src="./ajaxGet.js" charset="utf-8"></script>
+    <script src="./baiduTemplate.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var weather = document.querySelector('#weather');
+      var btn = document.querySelector('#btn');
+      var inputTag = document.querySelector('input');
+
+      btn.addEventListener('click', function () {
+        var cityName = inputTag.value;
+        ajaxGet('http://wthrcdn.etouch.cn/weather_mini?city=' + cityName, function (data) {
+          var data = JSON.parse(data);
+          var bt = baidu.template;
+          var fn = bt('weather_module');
+          weather.innerHTML = fn(data);
+        })
+      } )
+    </script>
+  </body>
+</html>
